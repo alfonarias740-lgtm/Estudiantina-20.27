@@ -1,0 +1,56 @@
+ESTUDIANTINA 2027 — QUÉ ES CADA ARCHIVO Y DÓNDE VA
+
+1) index.html
+   Es la página de la aplicación: diseño, pantallas, ranking, noticias, actividades,
+   calendario, encuestas y paneles de acceso.
+   Va en la raíz del repositorio de GitHub y es el archivo que Netlify publica.
+
+2) netlify.toml
+   Configura Netlify: indica que publique la carpeta raíz y dónde están las funciones.
+   Va en la raíz, junto a index.html. No lo borres.
+
+3) netlify/functions/api.mjs
+   Es el servidor/API de la aplicación. Gestiona el inicio de sesión, permisos,
+   puntos, noticias, encuestas y comunicación con Supabase.
+   Va en netlify/functions/api.mjs. Es necesario; no alcanza con subir solo index.html.
+
+4) database/schema.sql
+   Es el esquema SQL que crea las tablas config e items y activa la seguridad RLS.
+   Guardalo en GitHub dentro de database/. Además, abrilo y ejecutalo en Supabase:
+   Supabase > proyecto > SQL Editor > New query > pegar contenido > Run.
+   IMPORTANTE: GitHub no aloja ni ejecuta la base de datos. La base real vive en Supabase.
+
+5) .gitignore
+   Evita subir archivos locales o secretos como .env y la carpeta .netlify.
+   Va en la raíz.
+
+6) README.md
+   Contiene los pasos de instalación y publicación.
+
+ORDEN RECOMENDADO
+A. Crear un proyecto en Supabase.
+B. Ejecutar database/schema.sql en Supabase (esto crea las tablas).
+C. Subir TODO el contenido de esta carpeta a un repositorio de GitHub, conservando
+   las carpetas y rutas.
+D. En Netlify, importar ese repositorio. Build command: dejar vacío. Publish directory: .
+E. En Netlify > Site configuration > Environment variables, crear:
+   SUPABASE_URL       = Project URL de Supabase
+   SUPABASE_SERVICE_KEY = clave service_role de Supabase (SECRETA; nunca la pongas
+                          en index.html ni la subas a GitHub)
+   AUTH_SECRET        = una cadena aleatoria larga (40 caracteres o más)
+   SETUP_KEY          = una clave privada que usarás al configurar la app por primera vez
+F. Volver a Netlify y hacer un nuevo deploy.
+
+PRIMER INGRESO
+Abrí la dirección publicada por Netlify. La primera vez aparecerá Configuración inicial.
+Ingresá colegio, cursos, contraseñas, coordinadores y contraseña de Sexto.
+La clave SETUP_KEY debe coincidir con la variable que cargaste en Netlify.
+
+IMPORTANTE SOBRE LOS ARCHIVOS
+No subas únicamente index.html a Netlify: esta aplicación también necesita netlify.toml
+y netlify/functions/api.mjs para que funcione /api/. La carpeta database contiene el
+SQL para crear la estructura de datos en Supabase; no se importa como archivo en Netlify.
+
+SEGURIDAD
+No compartas SUPABASE_SERVICE_KEY ni la incluyas en el repositorio. Si alguna vez la
+publicás por error, regenerala desde Supabase.
